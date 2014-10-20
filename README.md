@@ -1,1 +1,5 @@
-github pages [link to data](http://pe3.github.io/jekyll-data/wikipedia-example.json)
+
+## Jekyll data test
+
+- link to [data browser](http://pe3.github.io/jekyll-data/)
+- link to [generated json file](http://pe3.github.io/jekyll-data/api/members.json)
