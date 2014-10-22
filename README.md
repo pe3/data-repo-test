@@ -1,5 +1,9 @@
 
-## Jekyll data test
+## Minimal Jekyll API
 
-- link to [data browser](http://pe3.github.io/jekyll-data/)
-- link to [generated json file](http://pe3.github.io/jekyll-data/api/members.json)
+- commits to YAML data automatically render to JSON on GitHub
+- this concept might be usefull in data curation 
+  - accept commits through pull requests
+  - full commit history in database independent format
+- link to [generated json file](http://pe3.github.io/minimal-jekyll-api/api/members.json) a.k.a the API
+- link to [plain html](http://pe3.github.io/minimal-jekyll-api/) which could contain a data browser / visualizer
