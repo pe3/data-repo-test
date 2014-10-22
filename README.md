@@ -6,4 +6,4 @@
   - accept commits through pull requests
   - full commit history in database independent format
 - link to [generated json file](http://pe3.github.io/minimal-jekyll-api/api/members.json) a.k.a the API
-- link to [plain html](http://pe3.github.io/minimal-jekyll-api/) which could contain a data browser / visualizer
+- link to api [browser / visualizer](http://pe3.github.io/minimal-jekyll-api/)
