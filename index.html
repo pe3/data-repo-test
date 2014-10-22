@@ -5,6 +5,7 @@
 		<title>Minimal Jekyll API</title>
 		<script src="http://fb.me/react-0.11.1.js"></script>
 		<script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js"></script>
 		<link rel="stylesheet" href="css/style.css">        
 	</head>
 	<body>
@@ -19,38 +20,17 @@
 					return { searchString: '' };
 				},
 
-				loadXMLDoc: function() {
-				    var xmlhttp;
-
-				    if (window.XMLHttpRequest) {
-				        // code for IE7+, Firefox, Chrome, Opera, Safari
-				        xmlhttp = new XMLHttpRequest();
-				    } else {
-				        // code for IE6, IE5
-				        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-				    }
-
-				    xmlhttp.onreadystatechange = function() {
-				        if (xmlhttp.readyState == 4 ) {
-				           if(xmlhttp.status == 200){
-				               document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
-				           }
-				           else if(xmlhttp.status == 400) {
-				              alert('There was an error 400')
-				           }
-				           else {
-				               alert('something else other than 200 was returned')
-				           }
-				        }
-				    }
-
-				    xmlhttp.open("GET", "http://pe3.github.io/minimal-jekyll-api/api/members.json", true);
-				    xmlhttp.send();
-				},
-
 				componentWillMount: function() {
 					console.log('will mount');
 
+					var request = window.superagent;
+
+					var url = 'https://api.github.com/repos/pe3/minimal-jekyll-api/contents/api/members.json';
+					request.get(url, function(response){
+					  console.log('Response ok:', response.ok);
+					  console.log('Response text:', response.text);
+					});
+					//this.loadXMLDoc();
 				},
 
 				handleChange: function(e){
@@ -67,7 +47,6 @@
 					var libraries = this.props.items;
 					var	searchString = this.state.searchString.trim().toLowerCase();
 
-
 					if(searchString.length > 0){
 
 						// We are searching. Filter the results.
@@ -78,29 +57,34 @@
 
 					}
 
-					return <div>
-								<input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Type here" />
-
-								<ul> 
-
-									{ libraries.map(function(l){
-										return <li>{l.name} <a href={l.url}>{l.url}</a></li>
-									}) }
-
-								</ul>
-
-							</div>;
-
+					return (
+						<div>
+							<p>this is an ui proto with hardcoded data</p>
+							<input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Type here" />
+							<ul> 
+								{ libraries.map(function(l){
+									return <li>{l.name} <a href={l.url}>{l.url}</a></li>
+								}) }
+							</ul>
+						</div>
+					);
 				}
 			});
-
-																																				
+																															
 			// Render the SearchExample component on the page
 			var libraries = [
 				{ 
-					name: 'Backbone.js', 
-					url: 'http://documentcloud.github.io/backbone/'
-				}];
+					name: 'Petri Kola', 
+					url: 'https://github.com/pe3'
+				},{ 
+					name: 'Liu Fengyun', 
+					url: 'https://github.com/liufengyun'
+				},{ 
+					name: 'Ben Balter', 
+					url: 'https://github.com/benbalter'
+				}
+
+				];
 
 			React.renderComponent(
 				<SearchExample items={ libraries } />,

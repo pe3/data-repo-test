@@ -54,6 +54,12 @@ ul li a{
 		color: #969d9d;
 }
 
+p {
+		font-size: 10px;
+		line-height: 14px;
+		color: #969d9d;
+}
+
 ul li:hover{
 		background-color:#d8f2f1;
 }
