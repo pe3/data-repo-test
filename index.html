@@ -1,21 +1,111 @@
 <!DOCTYPE html>
 <html lang="en-US">
-    <head>
-        <meta charset='utf-8'>
-        <title>Minimal Jekyll API</title>
-        <script src="http://fb.me/react-0.11.1.js"></script>
-        <script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
-        <link rel="stylesheet" href="css/style.css">        
-    </head>
-    <body>
-        <div id="content"></div>
-        <script type="text/jsx">
-            /** @jsx React.DOM */
-            React.renderComponent(
-                <h1>Hello, world!</h1>,
-                document.getElementById('content')
-            );
-            var url = "https://api.github.com/repos/pe3/jekyll-data/forks";
-        </script>
-    </body>
+	<head>
+		<meta charset='utf-8'>
+		<title>Minimal Jekyll API</title>
+		<script src="http://fb.me/react-0.11.1.js"></script>
+		<script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
+		<link rel="stylesheet" href="css/style.css">        
+	</head>
+	<body>
+		<div id="content"></div>
+		<script type="text/jsx">
+			/** @jsx React.DOM */
+			// Let's create a "real-time search" component
+
+			var SearchExample = React.createClass({
+
+				getInitialState: function(){
+					return { searchString: '' };
+				},
+
+				loadXMLDoc: function() {
+				    var xmlhttp;
+
+				    if (window.XMLHttpRequest) {
+				        // code for IE7+, Firefox, Chrome, Opera, Safari
+				        xmlhttp = new XMLHttpRequest();
+				    } else {
+				        // code for IE6, IE5
+				        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				    }
+
+				    xmlhttp.onreadystatechange = function() {
+				        if (xmlhttp.readyState == 4 ) {
+				           if(xmlhttp.status == 200){
+				               document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+				           }
+				           else if(xmlhttp.status == 400) {
+				              alert('There was an error 400')
+				           }
+				           else {
+				               alert('something else other than 200 was returned')
+				           }
+				        }
+				    }
+
+				    xmlhttp.open("GET", "http://pe3.github.io/minimal-jekyll-api/api/members.json", true);
+				    xmlhttp.send();
+				},
+
+				componentWillMount: function() {
+					console.log('will mount');
+
+				},
+
+				handleChange: function(e){
+
+					// If you comment out this line, the text box will not change its value.
+					// This is because in React, an input cannot change independently of the value
+					// that was assigned to it. In our case this is this.state.searchString.
+
+					this.setState({searchString:e.target.value});
+				},
+
+				render: function() {
+
+					var libraries = this.props.items;
+					var	searchString = this.state.searchString.trim().toLowerCase();
+
+
+					if(searchString.length > 0){
+
+						// We are searching. Filter the results.
+
+						libraries = libraries.filter(function(l){
+							return l.name.toLowerCase().match( searchString );
+						});
+
+					}
+
+					return <div>
+								<input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Type here" />
+
+								<ul> 
+
+									{ libraries.map(function(l){
+										return <li>{l.name} <a href={l.url}>{l.url}</a></li>
+									}) }
+
+								</ul>
+
+							</div>;
+
+				}
+			});
+
+																																				
+			// Render the SearchExample component on the page
+			var libraries = [
+				{ 
+					name: 'Backbone.js', 
+					url: 'http://documentcloud.github.io/backbone/'
+				}];
+
+			React.renderComponent(
+				<SearchExample items={ libraries } />,
+				document.body
+			);
+		</script>
+	</body>
 </html> 
