@@ -7,3 +7,17 @@
   - full commit history in database independent format
 - link to [generated json file](http://pe3.github.io/minimal-jekyll-api/api/members.json) a.k.a the API
 - link to content tailored [data browser](http://pe3.github.io/minimal-jekyll-api/)
+
+## development
+
+```
+git clone [repo]
+cd [repo]
+gem install jekyll
+jekyll serve --watch
+```
+
+## documentation
+
+Jekyll uses the [Liquid](https://github.com/Shopify/liquid/wiki) templating language to process templates. [Data To JSON](http://jekyllrb.com/docs/templates/) is a default feature.
+
