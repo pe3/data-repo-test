@@ -1,72 +1,66 @@
 <!DOCTYPE html>
 <html lang="en-US">
-	<head>
-		<meta charset='utf-8'>
-		<title>Minimal Jekyll API</title>
-		<script src="http://fb.me/react-0.11.1.js"></script>
-		<script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js"></script>
-		<link rel="stylesheet" href="css/style.css">        
-	</head>
-	<body>
-		<div id="content"></div>
-		<script type="text/jsx">
-			/** @jsx React.DOM */
+<head>
+    <meta charset='utf-8'>
+    <title>GitHub as public datastore</title>
+    <script src="https://npmcdn.com/babel-core@5.8.34/browser-polyfill.min.js" charset="utf-8"></script>
+    <script src="https://npmcdn.com/babel-core@5.8.34/browser.min.js" charset="utf-8"></script>
+    <script src="https://npmcdn.com/react@0.14.6/dist/react.js" charset="utf-8"></script>
+    <script src="https://npmcdn.com/react-dom@0.14.6/dist/react-dom.js" charset="utf-8"></script>
+    <script src="https://npmcdn.com/superagent@1.7.1/superagent.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="react-root"></div>
+    <script type="text/babel">
+        "use strict";
+        class SearchExample extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    searchString: '',
+                    items: []
+                }
+            }
+            componentWillMount(){
+                var request = window.superagent;
+                var self = this;
 
-			var SearchExample = React.createClass({
-
-				getInitialState: function(){
-					return { 
-						searchString: '',
-						items: []
-					};
-				},
-
-				componentWillMount: function() {
-					var request = window.superagent;
-					var self = this;
-
-					var url = 'api/members.json';
-					request.get(url, function(response){
-						self.setState({items: JSON.parse(response.text)});
-					});
-				},
-
-				handleChange: function(e){
-
-					this.setState({searchString:e.target.value});
-				},
-
-				render: function() {
-					var items = this.state.items;
-					var	searchString = this.state.searchString.trim().toLowerCase();
-
-					//console.log(items);
-					if(searchString.length > 0){
-						// Filter the results.
-						items = items.filter(function(l){
-							return l.name.toLowerCase().match( searchString );
-						});
-					}
-
-					return (
-						<div>
-							<p>update by editing <a href="https://github.com/pe3/data-repo-test/blob/gh-pages/_data/members.yml">yaml file</a></p>
-							<input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Type here" />
-							<ul> 
-								{ items.map(function(l){
-									return <li>{l.name} <a href={l.url}>{l.url}</a></li>
-								}) }
-							</ul>
-						</div>
-					);
-				}
-			});
-
-			React.renderComponent(
-				<SearchExample />,
-				document.body
-			);
-		</script>
-	</body>
-</html> 
+                request
+                .get('members.json')
+                .end(function(err, res){
+                    if(!err) {
+                        self.setState({items: res.body});
+                    } else {
+                        console.log(err)
+                    }
+                })
+            }
+            handleChange(e){
+                this.setState({searchString:e.target.value});
+            }
+            render() {
+                var items = this.state.items;
+                var searchString = this.state.searchString.trim().toLowerCase();
+                if(searchString.length > 0){
+                    items = items.filter(function(l){
+                        return l.name.toLowerCase().match( searchString );
+                    });
+                }
+                return (
+                    <div>
+                        <p>update by editing <a href="https://github.com/pe3/data-repo-test/blob/gh-pages/_data/members.yml">yaml file</a></p>
+                        <input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Type here" />
+                        <ul>
+                            { items.map(function(l,i){
+                                return <li key={i}>{l.name} <a href={l.url}>{l.url}</a></li>
+                            }) }
+                        </ul>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<SearchExample />, document.querySelector('#react-root'));
+    </script>
+</body>
+</html>
