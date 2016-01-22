@@ -27,7 +27,7 @@
                 var self = this;
 
                 request
-                .get('members.json')
+                .get('api/members.json')
                 .end(function(err, res){
                     if(!err) {
                         self.setState({items: res.body});
