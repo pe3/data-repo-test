@@ -50,7 +50,7 @@
                 return (
                     <div>
                         <p>update by editing <a href="https://github.com/pe3/data-repo-test/blob/gh-pages/_data/members.yml">yaml file</a></p>
-                        <input type="text" value={this.state.searchString} onChange={this.handleChange} placeholder="Type here" />
+                        <input type="text" value={this.state.searchString} onChange={this.handleChange.bind(this)} placeholder="Type here" />
                         <ul>
                             { items.map(function(l,i){
                                 return <li key={i}>{l.name} <a href={l.url}>{l.url}</a></li>
